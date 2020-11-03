@@ -23,7 +23,7 @@ def parse_args():
     parser = argparse.ArgumentParser('3dgnn')
     parser.add_argument('--num_epochs', default=50,type=int,
                         help='Number of epoch')
-    parser.add_argument('--batchsize', type=int, default=4,
+    parser.add_argument('--batchsize', type=int, default=2,
                         help='batch size in training')
     parser.add_argument('--pretrain', type=str, default=None,
                         help='Direction for pretrained weight')
@@ -183,7 +183,7 @@ def main(args):
         batch_loss_avg = 0
         if config.lr_schedule_type == 'exp':
             scheduler.step(epoch)
-        for batch_idx, rgbd_label_xy in tqdm(enumerate(dataloader_tr),total = len(dataloader_tr),smoothing=0.9):
+        for batch_idx, rgbd_label_xy in enumerate(dataloader_tr):
             x = rgbd_label_xy[0]
             target = rgbd_label_xy[1].long()
             xy = rgbd_label_xy[2]

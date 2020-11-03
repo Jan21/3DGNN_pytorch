@@ -1,7 +1,7 @@
 '''Data Loader parameter'''
 # Multiple threads loading data
-workers_tr = 4
-workers_va = 4
+workers_tr = 1
+workers_va = 1
 # Data augmentation
 flip_prob = 0.5
 crop_size = 0

@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import cv2
 import h5py
-
+import gc
 
 class Dataset(Dataset):
     def __init__(self, flip_prob=None, crop_type=None, crop_size=0):
@@ -21,11 +21,12 @@ class Dataset(Dataset):
 
         # as it turns out, trying to pickle this is a shit idea :D
 
-        rgb_images_fr = np.transpose(f['images'], [0, 2, 3, 1]).astype(np.float32)
+        rgb_images_fr = np.transpose(f['images'], [0, 2, 3, 1])
         label_images_fr = np.array(f['labels'])
 
         f.close()
-
+        del f
+        gc.collect()
         self.rgb_images = rgb_images_fr
         self.label_images = label_images_fr
 
@@ -35,7 +36,7 @@ class Dataset(Dataset):
 
     def __getitem__(self, idx):
         rgb = self.rgb_images[idx].astype(np.float32)
-        hha = np.transpose(cv2.imread("datasets/data/hha/" + str(idx+1) + ".png", cv2.COLOR_BGR2RGB), [1, 0, 2])
+        hha = np.transpose(cv2.imread("datasets/data/hha/img_" + str(idx+5001) + ".png", cv2.COLOR_BGR2RGB), [1, 0, 2])
         rgb_hha = np.concatenate([rgb, hha], axis=2).astype(np.float32)
         label = self.label_images[idx].astype(np.float32)
         label[label >= 14] = 0
